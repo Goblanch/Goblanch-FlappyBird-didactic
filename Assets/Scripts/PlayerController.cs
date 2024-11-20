@@ -14,8 +14,8 @@ public class PlayerController : MonoBehaviour
     // Fuerza con la que el personaje va a saltar
     public float jumpForce = 5f;
 
-    // Número de monedas actuales del jugador
-    private int _playerCoins;
+    // Nï¿½mero de monedas actuales del jugador
+    private int _playerPoints;
 
     private void Start() {
         // Recogemos la referencia al rigidbody
@@ -27,17 +27,17 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Método que hace que el personaje salte cuando apretamos espacio
+    /// Mï¿½todo que hace que el personaje salte cuando apretamos espacio
     /// </summary>
     private void PlayerMovement() {
         // Si pulsamos la tecla espacio...
         if (Input.GetButtonDown("Jump")) {
-            // Detenemos la velocidad del jugador en cualquir dirección.
+            // Detenemos la velocidad del jugador en cualquir direcciï¿½n.
             rb2d.velocity = Vector2.zero;
-            // Le añadimos una velocidad vertical para realizar el salto.
+            // Le aï¿½adimos una velocidad vertical para realizar el salto.
             rb2d.velocity = Vector3.up * jumpForce;
 
-            // OTRA OPCIÓN
+            // OTRA OPCIï¿½N
             //rb2d.AddForce(Vector3.up * jumpForce, ForceMode2D.Impulse);
         }
     }
@@ -45,18 +45,17 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision) {
         // Si colisiono con una moneda
         if (collision.CompareTag("Coin")) {
-            // Aumento el valor de las monedas que tiene el jugador
-            _playerCoins++;
-            // Actualizo la UI para mostrar la cantidad de monedas actual
-            ui.UpdateScoreText(_playerCoins);
+            AddPoint();
             // Destruyo la moneda que he cogido
             Destroy(collision.gameObject);
+        }else if(collision.CompareTag("PointTrigger")){
+            AddPoint();
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
 
-        // Si me choco con un obstáculo
+        // Si me choco con un obstï¿½culo
         if (collision.gameObject.CompareTag("Obstacle")){
             // Muerte
             PlayerDeath();
@@ -65,6 +64,13 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerDeath() {
         // Activamos la pantalla de gameOver
-        ui.ShowGameOverTab(_playerCoins);
+        ui.ShowGameOverTab(_playerPoints);
+    }
+
+    private void AddPoint(){
+        // Aumento el valor de las monedas que tiene el jugador
+        _playerPoints++;
+        // Actualizo la UI para mostrar la cantidad de monedas actual
+        ui.UpdateScoreText(_playerPoints);
     }
 }
